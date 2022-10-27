@@ -4,6 +4,9 @@
 	"main": "index.js",
 	"author": "chaos",
 	"license": "MIT",
+	"scripts": {
+		"start": "node ."
+	},
 	"dependencies": {
 		"discord-command-cooldown": "^1.0.8",
 		"discord.js": "^14.6.0",
