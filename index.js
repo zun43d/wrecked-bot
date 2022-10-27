@@ -8,7 +8,7 @@ const { token } = process.env
 // STARTING SERVER
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 5000
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
