@@ -5,6 +5,18 @@ const { Client, Collection, Events, GatewayIntentBits } = require('discord.js')
 require('dotenv').config()
 const { token } = process.env
 
+// STARTING SERVER
+const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.listen(port, () =>
+	console.log(`Example app listening at http://localhost:${port}`)
+)
+// END OF SERVER
+
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 
