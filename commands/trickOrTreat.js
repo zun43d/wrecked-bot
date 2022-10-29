@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js')
 
 const cooldown = 1000 * 60 * 60 * 8
-const trickChance = 9.0
+const trickChance = 9.5
 
 let talkedRecently = new Set()
 
