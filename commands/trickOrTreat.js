@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js')
 
-const cooldown = 1000 * 60 * 60 * 6
+const cooldown = 1000 * 60 * 60 * 8
+const trickChance = 9.0
 
 let talkedRecently = new Set()
 
@@ -17,7 +18,7 @@ const trickOrTreat = (userid) => {
 		talkedRecently.delete(userid)
 	}, cooldown)
 
-	return random > 8.5 ? '🍬 Treat!' : '🎃 Trick!'
+	return random > trickChance ? '🍬 Treat!' : '🎃 Trick!'
 }
 
 module.exports = {
