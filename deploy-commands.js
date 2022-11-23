@@ -26,16 +26,17 @@ const rest = new REST({ version: '10' }).setToken(token)
 		)
 
 		// The put method is used to fully refresh all commands in the guild with the current set
+		let data
 
 		//Guild-based commands
-		await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+		data = await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
 			body: commands,
 		})
 
 		// Global commands
-		const data = await rest.put(Routes.applicationCommands(clientId), {
-			body: commands,
-		})
+		// data = await rest.put(Routes.applicationCommands(clientId), {
+		// 	body: commands,
+		// })
 
 		console.log(
 			`Successfully reloaded ${data.length} application (/) commands.`
