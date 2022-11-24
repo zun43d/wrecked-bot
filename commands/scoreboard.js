@@ -1,5 +1,11 @@
 const fs = require('fs')
+const schedule = require('node-schedule')
 const { SlashCommandBuilder, WebhookClient } = require('discord.js')
+
+const webhookClient = new WebhookClient({
+	id: process.env.webhookId,
+	token: process.env.webhookToken,
+})
 
 function addHours(numOfHours, date = new Date()) {
 	date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000)
@@ -26,6 +32,28 @@ const getEndTime = () => {
 	return endTimeUTC
 }
 
+// reset scoreBoard.json by deleting it and update initTime in data.json
+const resetScoreBoard = () => {
+	// delete scoreBoard.json
+	fs.unlinkSync('score/scoreBoard.json')
+
+	// update initTime in data.json
+	const data = fs.readFileSync('data.json')
+	const dataObj = JSON.parse(data)
+	dataObj.initTime = Date.now()
+
+	const dataJSON = JSON.stringify(dataObj, null, 2)
+	fs.writeFileSync('data.json', dataJSON)
+}
+
+schedule.scheduleJob(new Date(getEndTime()), () => {
+	webhookClient.send({
+		content: 'Scoreboard that ended at ' + getEndTime(),
+		embeds: [embed],
+	})
+	resetScoreBoard()
+})
+
 // read scoreBoard.json and get the top 10 scores
 const getTop10 = () => {
 	const data = () => {
@@ -49,23 +77,27 @@ const getTop10 = () => {
 
 const embed = {
 	color: 0xe97532,
-	title: 'Score Board',
-	description: `Remember: Scoreboard resets every 24 hours.\nNext reset: \`${getEndTime()} UTC+0000\`\n\n`,
+	title: 'Scoreboard',
+	description: `Remember: Scoreboard resets every 24 hours.\n\n`,
 	fields: [
 		{
 			name: 'Top 10 people with the most scores.',
-			value:
-				getTop10()
-					.map((obj, i) => {
-						return `\`${i + 1}. \` <@${obj.id}> · Score: **${obj.score}** ${
-							i === 0 ? '🥇' : ''
-						}`
-					})
-					.join('\n') || '*No one has scored yet.*',
+			value: fs.existsSync('score/scoreBoard.json')
+				? getTop10()
+						.map((obj, i) => {
+							return `\`${i + 1}. \` <@${obj.id}> **·** Score: **${
+								obj.score
+							}** ${i === 0 ? '🥇' : ''}`
+						})
+						.join('\n')
+				: '*No one has scored yet.*\n',
 			inline: false,
 		},
 	],
-	timestamp: new Date().toISOString(),
+	footer: {
+		text: `Scoreboard will reset at ${getEndTime()} UTC \n\n`,
+	},
+	// timestamp: new Date().toISOString(),
 }
 
 module.exports = {
