@@ -34,7 +34,7 @@ const sortScoreBoard = () => {
 const saveScoreBoard = () => {
 	const fs = require('fs')
 	const data = JSON.stringify(scoreBoard, null, 2)
-	fs.writeFile('scoreBoard.json', data, (err) => {
+	fs.writeFile('score/scoreBoard.json', data, (err) => {
 		if (err) {
 			throw err
 		}
@@ -69,12 +69,12 @@ module.exports = {
 		const userId = interaction.user.id
 
 		// Check if user has already tried
-		// if (triedRecently.has(userId)) {
-		// 	await interaction.reply('You have already tried! ^_^')
-		// 	return
-		// }
+		if (triedRecently.has(userId)) {
+			await interaction.reply('You have already tried! ^_^')
+			return
+		}
 
-		// setTriedRecently(userId)
+		setTriedRecently(userId)
 
 		// Do goalOrMiss and handleUser
 		if (goalOrMiss()) {
