@@ -1,45 +1,72 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const fs = require('fs')
+const { SlashCommandBuilder, WebhookClient } = require('discord.js')
 
-// Build a discord embed that shows top 10 scorer
+function addHours(numOfHours, date = new Date()) {
+	date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000)
 
-let scores = [152, 545, 253, 554, 876, 215]
-let userId
+	return date
+}
 
-const embed = new EmbedBuilder()
-embed.setTitle('Top 10 Scorers')
-embed.setColor('#e97532')
-embed.setImage('https://i.imgur.com/AfFp7pu.png')
-embed.setDescription('Top 10 Players who scored the most in the last 24 hours')
-// embed.setThumbnail('https://i.imgur.com/wSTFkRM.png')
-embed.setTimestamp()
+// get initTime from data.json
+const getInitTime = () => {
+	const data = fs.readFileSync('data.json')
+	const dataObj = JSON.parse(data)
 
-// embed.addFields({ name: 'Score', value: scores.join('\n'), inline: true })
+	return dataObj.initTime
+}
 
-const board = scores
-	.map((score, index) => `\`${index + 1}. \`**${score}**`)
-	.join('\n')
-embed.addFields({
-	name: 'Scoreboard',
-	value: board,
-	inline: false,
-})
+// read scoreBoard.json and get the top 10 scores
+const getTop10 = () => {
+	const data = () => {
+		if (fs.existsSync('score/scoreBoard.json')) {
+			return fs.readFileSync('score/scoreBoard.json')
+		}
 
-// scores.forEach((score, index) => {
-// 	embed.addFields({
-// 		name: `${index + 1}. `,
-// 		value: `Score: ${score}`,
-// 		inline: true,
-// 	})
-// })
+		return '[]'
+	}
+
+	const scoreBoard = JSON.parse(data())
+
+	// sort scoreBoard in descending order
+	// scoreBoard.sort((a, b) => b.score - a.score)
+
+	// get top 10 scores
+	const top10 = scoreBoard.slice(0, 10)
+
+	return top10
+}
+
+const embed = {
+	color: 0xe97532,
+	title: 'Score Board',
+	description: `Remember: Scoreboard resets every 24 hours.\nNext reset: \`${addHours(
+		24,
+		new Date(getInitTime())
+	).toLocaleString()}\`\n\n`,
+	fields: [
+		{
+			name: 'Top 10 people with the most scores.',
+			value:
+				getTop10()
+					.map((obj, i) => {
+						return `\`${i + 1}. \` <@${obj.id}> · Score: **${obj.score}** ${
+							i === 0 ? '🥇' : ''
+						}`
+					})
+					.join('\n') || '*No one has scored yet.*',
+			inline: false,
+		},
+	],
+	timestamp: new Date().toISOString(),
+}
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('scoreboard')
 		.setDescription('Top 10 players with the most score!'),
 	async execute(interaction) {
-		userId = interaction.user.id
+		// const userId = interaction.user.id
 		await interaction.reply({
-			content: `<@${userId}>`,
 			embeds: [embed],
 			// ephemeral: true,
 		})
