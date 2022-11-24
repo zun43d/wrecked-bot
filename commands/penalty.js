@@ -3,8 +3,8 @@ const { SlashCommandBuilder } = require('discord.js')
 const scoreBoard = []
 
 const msg = {
-	goal: 'Goal!',
-	miss: 'Miss!',
+	goal: 'Goal! ⚽',
+	miss: 'Miss! ⛔',
 }
 
 const cooldown = 1000 /*ms*/ * 60 /*sec*/ * 60 /*min*/ * 4 /*hrs*/
