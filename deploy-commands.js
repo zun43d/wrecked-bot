@@ -1,5 +1,6 @@
 const { REST, Routes } = require('discord.js')
 require('dotenv').config()
+// eslint-disable-next-line no-undef
 const { clientId, guildId, token } = process.env
 const fs = require('node:fs')
 
