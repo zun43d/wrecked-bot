@@ -15,6 +15,17 @@ const getInitTime = () => {
 	return dataObj.initTime
 }
 
+// calculate the ending time
+const getEndTime = () => {
+	const initTime = getInitTime()
+	const endTime = addHours(24, new Date(initTime))
+
+	// convert endTime to UTC
+	const endTimeUTC = new Date(endTime.toUTCString()).toLocaleString()
+
+	return endTimeUTC
+}
+
 // read scoreBoard.json and get the top 10 scores
 const getTop10 = () => {
 	const data = () => {
@@ -39,10 +50,7 @@ const getTop10 = () => {
 const embed = {
 	color: 0xe97532,
 	title: 'Score Board',
-	description: `Remember: Scoreboard resets every 24 hours.\nNext reset: \`${addHours(
-		24,
-		new Date(getInitTime())
-	).toLocaleString()}\`\n\n`,
+	description: `Remember: Scoreboard resets every 24 hours.\nNext reset: \`${getEndTime()} UTC+0000\`\n\n`,
 	fields: [
 		{
 			name: 'Top 10 people with the most scores.',
