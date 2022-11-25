@@ -3,11 +3,11 @@ const { SlashCommandBuilder } = require('discord.js')
 const scoreBoard = []
 
 const msg = {
-	goal: 'Goal! ⚽',
+	goal: 'Goal!!!!! ⚽',
 	miss: 'Miss! ⛔',
 }
 
-const cooldown = 1000 /*ms*/ * 60 /*sec*/ * 60 /*min*/ * 4 /*hrs*/
+const cooldown = 1000 /*ms*/ * 60 /*sec*/ * 30 /*min*/ /* * */ /*4*/ /*hrs*/
 const missChance = 65
 
 let triedRecently = new Set()
@@ -70,7 +70,7 @@ module.exports = {
 
 		// Check if user has already tried
 		if (triedRecently.has(userId)) {
-			await interaction.reply('You have already tried! ^_^')
+			await interaction.reply('Please wait and let others try! ^_^')
 			return
 		}
 

@@ -49,7 +49,7 @@ const resetScoreBoard = () => {
 schedule.scheduleJob(new Date(getEndTime()), () => {
 	webhookClient.send({
 		content: 'Scoreboard that ended at ' + getEndTime(),
-		embeds: [embed],
+		embeds: [embed()],
 	})
 	resetScoreBoard()
 })
