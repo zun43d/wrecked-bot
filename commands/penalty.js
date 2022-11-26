@@ -1,3 +1,4 @@
+const fs = require('fs')
 const { SlashCommandBuilder } = require('discord.js')
 
 const scoreBoard = []
@@ -32,7 +33,6 @@ const sortScoreBoard = () => {
 
 // save the scoreboard to a JSON file
 const saveScoreBoard = () => {
-	const fs = require('fs')
 	const data = JSON.stringify(scoreBoard, null, 2)
 	fs.writeFile('score/scoreBoard.json', data, (err) => {
 		if (err) {
@@ -43,6 +43,13 @@ const saveScoreBoard = () => {
 }
 
 const handleUser = (userid) => {
+	// check if scoreboard.json exits, if yes read it then parse it to scoreBoard
+	if (fs.existsSync('score/scoreBoard.json')) {
+		const data = fs.readFileSync('score/scoreBoard.json')
+		const dataObj = JSON.parse(data)
+		scoreBoard.push(...dataObj)
+	}
+
 	const user = scoreBoard.find((user) => user.id === userid)
 	if (user) {
 		user.score++
