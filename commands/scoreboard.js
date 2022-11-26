@@ -24,7 +24,7 @@ const getInitTime = () => {
 // calculate the ending time
 const getEndTime = () => {
 	const initTime = getInitTime()
-	const endTime = addHours(24, new Date(initTime))
+	const endTime = addHours(24, new Date(+initTime))
 
 	// convert endTime to UTC
 	const endTimeUTC = new Date(endTime.toUTCString()).toLocaleString()
