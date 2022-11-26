@@ -24,7 +24,7 @@ const getInitTime = () => {
 // calculate the ending time
 const getEndTime = () => {
 	const initTime = getInitTime()
-	const endTime = addHours(24, new Date(+initTime))
+	const endTime = addHours(24, new Date(initTime))
 
 	// convert endTime to UTC
 	const endTimeUTC = new Date(endTime.toUTCString()).toLocaleString()
@@ -40,7 +40,7 @@ const resetScoreBoard = () => {
 	// update initTime in data.json
 	const data = fs.readFileSync('data.json')
 	const dataObj = JSON.parse(data)
-	dataObj.initTime = Date.now()
+	dataObj.initTime = new Date().toLocaleString()
 
 	const dataJSON = JSON.stringify(dataObj, null, 2)
 	fs.writeFileSync('data.json', dataJSON)
